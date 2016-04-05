@@ -18,9 +18,9 @@ public class BuyServiceImpl implements BuyService{
 	}
 
 	@Override
-	public Buy getBuy(int prodNo) throws Exception {
+	public Buy getBuy(int memberNo) throws Exception {
 		// TODO Auto-generated method stub
-		return buydao.findBuy(prodNo);
+		return buydao.findBuy(memberNo);
 	}
 
 	@Override

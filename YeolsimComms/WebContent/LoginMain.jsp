@@ -86,7 +86,7 @@
                              <% }else{ 
                             	List<Product> randomList=new ArrayList<Product>();
                             	  Random ra = new Random();
-                            	  int mainSize= list.size(); //사이즈 따로 구해서
+                            	  int mainSize= list.size(); 
                             	  for(int i=0; i<mainSize ;i++){
                             	   int rv = ra.nextInt(list.size());
                             	   randomList.add(list.get(rv));

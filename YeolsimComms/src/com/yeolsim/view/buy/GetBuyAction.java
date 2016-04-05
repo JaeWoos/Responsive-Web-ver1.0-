@@ -7,11 +7,14 @@ import javax.servlet.http.HttpSession;
 import com.yeolsim.framework.Action;
 import com.yeolsim.service.buy.BuyService;
 import com.yeolsim.service.buy.impl.BuyServiceImpl;
+import com.yeolsim.service.buyMember.BuyMemberService;
+import com.yeolsim.service.buyMember.impl.BuyMemberServiceImpl;
 import com.yeolsim.service.domain.Buy;
+import com.yeolsim.service.domain.BuyMember;
 import com.yeolsim.service.domain.Member;
-import com.yeolsim.service.domain.Product;
-import com.yeolsim.service.product.ProductService;
-import com.yeolsim.service.product.impl.ProductServiceImpl;
+import com.yeolsim.service.domain.Pay;
+import com.yeolsim.service.pay.PayService;
+import com.yeolsim.service.pay.impl.PayServiceImpl;
 
 public class GetBuyAction extends Action {
 
@@ -22,23 +25,40 @@ public class GetBuyAction extends Action {
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		int prodNo = Integer.parseInt(request.getParameter("prodNo"));
-		
 		HttpSession session=request.getSession();
 		Member member=new Member();
 		member=(Member)session.getAttribute("member");
-		ProductService productService = new ProductServiceImpl();
-		Product product=productService.getProduct(prodNo);
-		System.out.println("getBUY test:"+product);
+		System.out.println("memberNo"+member.getMemberNo());
 		
+		Buy buy=new Buy();
+		buy.setMemberNo(member.getMemberNo());
+		buy.setTotalBuy(Integer.parseInt(request.getParameter("totalBuy")));
 		BuyService buyService=new BuyServiceImpl();
-		Buy buy=buyService.getBuy(prodNo);
+		buyService.insertBuy(buy);
+		buy.setBuyNo(buyService.getBuy(member.getMemberNo()).getBuyNo());
+		System.out.println("1");
 		
-		request.setAttribute("product", product);
+		BuyMember buyMember=new BuyMember();
+		buyMember.setAddr(request.getParameter("Addr"));
+		buyMember.setName(request.getParameter("name"));
+		buyMember.setPhone(request.getParameter("phone"));
+		buyMember.setBuyNo(buy.getBuyNo());
+		BuyMemberService buyMemberService=new BuyMemberServiceImpl();
+		buyMemberService.addMember(buyMember);
+		System.out.println("2");
+		
+		Pay pay=new Pay();
+		pay.setPayMenu(request.getParameter("pay"));
+		pay.setBuyNo(buy.getBuyNo());
+		PayService payService=new PayServiceImpl();
+		payService.insertPay(pay);
+		System.out.println("3");
+		
 		request.setAttribute("member", member);
 		request.setAttribute("buy", buy);
+		request.setAttribute("pay", pay);
 		
-		return "forward:/buy/getBuy.jsp";
+		return "";
 
 	}
 }

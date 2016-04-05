@@ -8,9 +8,8 @@ public class Buy {
 	///Field
 	private int buyNo;
 	private int memberNo;
-	private int prodNo;
+	private int totalBuy;
 	private int tranNo;
-	private int buymemberNo;
 	private Date data;
 
 	///Constructor
@@ -33,12 +32,12 @@ public class Buy {
 		this.memberNo = memberNo;
 	}
 
-	public int getProdNo() {
-		return prodNo;
+	public int getTotalBuy() {
+		return totalBuy;
 	}
 
-	public void setProdNo(int prodNo) {
-		this.prodNo = prodNo;
+	public void setTotalBuy(int totalBuy) {
+		this.totalBuy = totalBuy;
 	}
 
 	public int getTranNo() {
@@ -59,16 +58,7 @@ public class Buy {
 
 	@Override
 	public String toString() {
-		return "Buy [buyNo=" + buyNo + ", memberNo=" + memberNo + ", prodNo=" + prodNo + ", tranNo=" + tranNo
+		return "Buy [buyNo=" + buyNo + ", memberNo=" + memberNo + ", totalBuy=" + totalBuy + ", tranNo=" + tranNo
 				+ ", data=" + data + "]";
 	}
-
-	public int getBuymemberNo() {
-		return buymemberNo;
-	}
-
-	public void setBuymemberNo(int buymemberNo) {
-		this.buymemberNo = buymemberNo;
-	}
-
 }

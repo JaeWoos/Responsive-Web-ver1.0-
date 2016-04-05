@@ -23,25 +23,23 @@ public class BuyDAO {
 	public void insertBuy(Buy buy)throws Exception{
 		
 		Connection con = DBUtil.getConnection();
-		String sql = "insert into buy values (seq_buy_buy_no.nextval,?,?,sysdate,?,?)";
+		String sql = "insert into buy values (seq_buy_buy_no.nextval,?,?,sysdate,? )";
 		
 		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setInt(1, buy.getProdNo());
-		stmt.setInt(2, buy.getMemberNo());
-		stmt.setInt(3, buy.getTranNo());
-		stmt.setInt(4, buy.getBuymemberNo());
+		stmt.setInt(1, buy.getMemberNo());
+		stmt.setInt(2, buy.getTotalBuy());
+		stmt.setInt(3, 1);
 
 		stmt.executeUpdate();
 		
 		con.close();
 	}
-	public Buy findBuy(int probNo)throws Exception{
-		
+	public Buy findBuy(int memberNo)throws Exception{
 		Connection con=DBUtil.getConnection();
-		String sql="select *from buy where prod_No=? ";
+		String sql="select *from buy where Member_No=? ";
 		
 		PreparedStatement stmt=con.prepareStatement(sql);
-		stmt.setInt(1, probNo);
+		stmt.setInt(1, memberNo);
 		
 		ResultSet rs=stmt.executeQuery();
 		
@@ -49,7 +47,6 @@ public class BuyDAO {
 		
 		while (rs.next()) {
 			buy.setBuyNo(rs.getInt("buy_no"));
-			buy.setProdNo(rs.getInt("prod_no"));
 			buy.setMemberNo(rs.getInt("member_no"));
 			buy.setData(rs.getDate("buy_date"));
 			buy.setTranNo(rs.getInt("tran_no"));
@@ -107,8 +104,7 @@ public class BuyDAO {
 			buy.setData(rs.getDate("buy_date"));
 			buy.setTranNo(rs.getInt("tran_no"));
 			buy.setMemberNo(rs.getInt("member_no"));
-			buy.setProdNo(rs.getInt("prod_no"));
-			buy.setBuymemberNo(rs.getInt("buymember_no"));
+
 			
 			prodList.add(product);
 			buyList.add(buy);

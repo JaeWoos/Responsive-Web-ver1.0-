@@ -99,18 +99,14 @@
                     </div>
 	<% } %>	 
                 </div>
-
             </div>
-
         </div>
 
     </div>
     <!-- /.container -->
 
     <div class="container">
-
         <hr>
-
         <!-- Footer -->
         <footer>
             <div class="row">
@@ -119,7 +115,6 @@
                 </div>
             </div>
         </footer>
-
     </div>
     <!-- /.container -->
 

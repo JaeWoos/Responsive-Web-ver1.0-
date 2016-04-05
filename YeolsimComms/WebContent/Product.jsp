@@ -73,6 +73,7 @@
                 <div class="list-group">
                     <a href="/updateMemberView.do?userId=<%=member.getId()%>" class="list-group-item">개인정보 수정</a>
                     <a href="/product/addProduct.jsp?userId=<%=member.getId()%>" class="list-group-item" >상품 등록</a>
+                    <a href="/addBuketList.do" class="list-group-item"  >장바 구니</a>
                     <a href="/listBuy.do?userId=<%=member.getId()%>" class="list-group-item"  >구매 목록</a>
                 </div>
             </div>

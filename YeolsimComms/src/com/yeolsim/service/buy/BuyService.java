@@ -10,7 +10,7 @@ public interface BuyService {
 	
 	public void insertBuy(Buy buy) throws Exception;
 
-	public Buy getBuy(int prodNo) throws Exception;
+	public Buy getBuy(int memberNo) throws Exception;
 
 	public void delBuy(int tranNo) throws Exception;
 
