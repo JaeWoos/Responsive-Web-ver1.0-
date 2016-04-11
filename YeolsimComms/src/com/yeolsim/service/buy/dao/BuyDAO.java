@@ -11,7 +11,9 @@ import java.util.Map;
 
 import com.yeolsim.common.util.DBUtil;
 import com.yeolsim.service.domain.Buy;
+import com.yeolsim.service.domain.BuyMember;
 import com.yeolsim.service.domain.Member;
+import com.yeolsim.service.domain.Pay;
 import com.yeolsim.service.domain.Product;
 import com.yeolsim.service.member.dao.MemberDao;
 
@@ -34,12 +36,12 @@ public class BuyDAO {
 		
 		con.close();
 	}
-	public Buy findBuy(int memberNo)throws Exception{
+	public Buy findBuy(int totalBuy)throws Exception{
 		Connection con=DBUtil.getConnection();
-		String sql="select *from buy where Member_No=? ";
+		String sql="select *from buy b, temp t where B.TOTAL_BUY=T.TOTAL_BUY and B.TOTAL_BUY=?";
 		
 		PreparedStatement stmt=con.prepareStatement(sql);
-		stmt.setInt(1, memberNo);
+		stmt.setInt(1, totalBuy);
 		
 		ResultSet rs=stmt.executeQuery();
 		
@@ -54,6 +56,42 @@ public class BuyDAO {
 		con.close();
 		
 		return buy;
+		}
+	
+	public Map<String, Object> findBuy2(int buyNo)throws Exception{
+		Connection con=DBUtil.getConnection();
+		String sql="select *from(select *from buy where BUY.BUY_NO=?) b, buymember bm, pay p ";
+				sql+=" where B.BUY_NO=BM.BUY_NO and B.BUY_NO=P.BUY_NO ";
+		PreparedStatement stmt=con.prepareStatement(sql);
+		stmt.setInt(1, buyNo);
+		
+		ResultSet rs=stmt.executeQuery();
+		
+		Map<String, Object> map=new HashMap<String, Object>();
+		Buy buy=new Buy();
+		BuyMember buyMember=new BuyMember();
+		Pay pay=new Pay();
+		
+		while (rs.next()) {
+			buy.setBuyNo(rs.getInt("buy_no"));
+			buy.setMemberNo(rs.getInt("member_no"));
+			buy.setData(rs.getDate("buy_date"));
+			buy.setTranNo(rs.getInt("tran_no"));
+			
+			buyMember.setAddr(rs.getString("addr"));
+			buyMember.setName(rs.getString("name"));
+			buyMember.setPhone(rs.getString("phone"));
+			
+			pay.setPayMenu(rs.getString("pay_menu"));
+		}
+		map.put("buy", buy);
+		map.put("buyMember", buyMember);
+		map.put("pay", pay);
+		
+		con.close();
+		rs.close();
+		
+		return map;
 		}
 	
 	public void delBuy(int buyNo)throws Exception{
@@ -71,19 +109,21 @@ public class BuyDAO {
 		
 		con.close();
 	}
-
-
+	
 	public Map<String, Object> getBuyList(int memberNo)throws Exception{
 		
 		Map<String, Object> map=new HashMap<String, Object>();
 		
 		Connection con=DBUtil.getConnection();
 		
-		String sql="select *from buy b, product p where b.buymember_no=?";
-		sql += "and b.prod_no=p.prod_no order by buy_date ";
+		String sql="SELECT p.*, T.COUNT, b.* FROM buy b ";
+		sql += " INNER JOIN temp t ON B.TOTAL_BUY = T.TOTAL_BUY ";
+		sql += "  INNER JOIN product p ON T.PROD_NO = P.PROD_NO ";
+		sql += "  where B.MEMBER_NO=? and T.stat=1 order by B.BUY_NO desc";
 
 		PreparedStatement pStmt=con.prepareStatement(sql);
 		pStmt.setInt(1, memberNo);
+
 		
 		ResultSet rs = pStmt.executeQuery();
 	
@@ -104,6 +144,7 @@ public class BuyDAO {
 			buy.setData(rs.getDate("buy_date"));
 			buy.setTranNo(rs.getInt("tran_no"));
 			buy.setMemberNo(rs.getInt("member_no"));
+			buy.setMemberNo(rs.getInt("total_buy"));
 
 			
 			prodList.add(product);
@@ -159,40 +200,6 @@ public class BuyDAO {
 		
 		return list;
 		}
-	
-	/*
-	private int getTotalCount(String sql) throws Exception {
-		
-		sql = " SELECT COUNT(*) "+
-		          " FROM ( " +sql+ ") countTable ";
-		
-		Connection con = DBUtil.getConnection();
-		PreparedStatement pStmt = con.prepareStatement(sql);
-		ResultSet rs = pStmt.executeQuery();
-		
-		int totalCount = 0;
-		if( rs.next() ){
-			totalCount = rs.getInt(1);
-		}
-		
-		pStmt.close();
-		con.close();
-		rs.close();
-		
-		return totalCount;
-	}
-	
-	private String makeCurrentPageSql(String sql , Search search){
-		sql = 	"SELECT * "+ 
-					"FROM (		SELECT inner_table. * ,  ROWNUM AS row_seq " +
-									" 	FROM (	"+sql+" ) inner_table "+
-									"	WHERE ROWNUM <="+search.getCurruntPage()*search.getPageSize()+" ) " +
-					"WHERE row_seq BETWEEN "+((search.getCurruntPage()-1)*search.getPageSize()+1) +" AND "+search.getCurruntPage()*search.getPageSize();
-		
-		System.out.println("UserDAO :: make SQL :: "+ sql);	
-		
-		return sql;
-	}
-*/
+
 }
 	

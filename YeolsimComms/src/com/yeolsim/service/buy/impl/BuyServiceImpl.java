@@ -18,9 +18,15 @@ public class BuyServiceImpl implements BuyService{
 	}
 
 	@Override
-	public Buy getBuy(int memberNo) throws Exception {
+	public Buy getBuy(int totalBuy) throws Exception {
 		// TODO Auto-generated method stub
-		return buydao.findBuy(memberNo);
+		return buydao.findBuy(totalBuy);
+	}
+	
+	@Override
+	public Map<String, Object> getBuy2(int buyNo) throws Exception {
+		// TODO Auto-generated method stub
+		return buydao.findBuy2(buyNo);
 	}
 
 	@Override
@@ -40,6 +46,7 @@ public class BuyServiceImpl implements BuyService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	
 	
 }

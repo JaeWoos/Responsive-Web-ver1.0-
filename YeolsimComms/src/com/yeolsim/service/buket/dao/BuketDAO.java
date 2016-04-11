@@ -21,7 +21,7 @@ public class BuketDAO {
 	public void insertBuket(Buket buket)throws Exception{
 		
 		Connection con = DBUtil.getConnection();
-		String sql = "insert into temp values (seq_buy_buy_no.nextval,?,?,?)";
+		String sql = "insert into temp values (seq_temp_total_buy.nextval,?,?,?,default)";
 		
 		PreparedStatement stmt = con.prepareStatement(sql);
 		stmt.setInt(1, buket.getMemberNo());
@@ -35,7 +35,7 @@ public class BuketDAO {
 	public Buket findBuket1(int memberNo)throws Exception{
 		
 		Connection con = DBUtil.getConnection();
-		String sql = "select *from temp where member_no=?";
+		String sql = "select *from(select *from temp t order by T.TOTAL_BUY desc) where member_no=? and rownum=1 ";
 		
 		PreparedStatement stmt = con.prepareStatement(sql);
 		stmt.setInt(1, memberNo);
@@ -55,12 +55,47 @@ public class BuketDAO {
 		return buket;
 	}
 	
+	public Map<String, Object> findBuket2(int totalBuy)throws Exception{
+		
+		Connection con = DBUtil.getConnection();
+		String sql = "select *from product p, temp t where T.PROD_NO=P.PROD_NO and T.TOTAL_BUY=? ";
+		
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setInt(1, totalBuy);
+		
+		Map<String, Object> map=new HashMap<>();
+		
+		ResultSet rs=stmt.executeQuery();
+		Buket buket=new Buket();
+		
+		while(rs.next()){
+			buket.setCount(rs.getInt("count"));
+			buket.setMemberNo(rs.getInt("member_no"));
+			buket.setProdNo(rs.getInt("prod_no"));
+			buket.setTotalBuy(rs.getInt("total_buy"));
+			map.put("buket", buket);
+			
+			Product product=new Product();
+			product.setProdName(rs.getString("prodName"));
+			product.setPrice(rs.getInt("price"));
+			product.setInfo(rs.getString("info"));
+			product.setPic(rs.getString("pic"));
+			product.setProdNo(rs.getInt("prod_no"));
+			map.put("product", product);
+		}
+		stmt.executeUpdate();
+		con.close();
+
+		return map;
+	}
+	
 	public Map<String, Object> addBuketList(int memberNo)throws Exception{
 		
 		Map<String, Object> map=new HashMap<>();
 		
 		Connection con = DBUtil.getConnection();
-		String sql = "select p.prodName, p.price, p.info, p.pic, t.* from temp t , product p where t.prod_no=P.prod_no and t.member_no=?";
+		String sql = "select p.prodName, p.price, p.info, p.pic, t.* from temp t , product p ";
+				sql+=" where t.prod_no=P.prod_no and t.member_no=? and T.STAT=0 ";
 		
 		PreparedStatement stmt = con.prepareStatement(sql);
 		stmt.setInt(1, memberNo);
@@ -82,6 +117,7 @@ public class BuketDAO {
 			product.setPrice(rs.getInt("price"));
 			product.setInfo(rs.getString("info"));
 			product.setPic(rs.getString("pic"));
+			product.setProdNo(rs.getInt("prod_no"));
 			productList.add(product);
 		}
 		map.put("buket", buketList);
@@ -90,6 +126,20 @@ public class BuketDAO {
 		con.close();
 		
 		return map;
+	}
+	
+	public void updateBuket(int totalBuy)throws Exception{
+		
+		Connection con = DBUtil.getConnection();
+		String sql = " UPDATE temp SET stat=1 WHERE total_buy=? ";
+		
+		PreparedStatement stmt = con.prepareStatement(sql);
+		stmt.setInt(1, totalBuy);
+		
+		
+		stmt.executeUpdate();
+		con.close();
+
 	}
 }
 	

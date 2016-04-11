@@ -40,7 +40,7 @@ public class AddBuyAction extends Action {
 		
 		ProductService service=new ProductServiceImpl();
 		Product prod = service.getProduct(prodNo);
-		
+		System.out.println("addBuyAction :"+buket);
 		request.setAttribute("product", prod);
 		request.setAttribute("buket", buket);
 		

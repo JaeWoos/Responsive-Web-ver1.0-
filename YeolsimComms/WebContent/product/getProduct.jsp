@@ -63,29 +63,7 @@
 	        
 	    })
 	        
-	   	function addProduct(){
-	   		$("div.caption-full").append(
-	   				'<hr style="border: solid 1px;"><h4>배송지 정보</h4><br><form class="form-horizontal" role="form" id="formAddProduct"'+
-						'action="javascript:productCheck()" method="post"enctype="multipart/form-data">'+
-						'<div class="form-group" id="divName">'+
-							'<label for="divProdName" class="col-lg-2 control-label">수취인</label>'+
-							'<div class="col-lg-10">'+
-								'<input type="text" class="form-control" id="prodName" name="prodName" data-rule-required="true"'+
-								'placeholder="받으실 분 이름을 입력해주세요"></div></div>'+
-					   		'<div class="form-group" id="divPhone">'+
-							'<label for="divProdName" class="col-lg-2 control-label">전화번호</label>'+
-							'<div class="col-lg-10">'+
-								'<input type="text" class="form-control" id="prodName" name="prodName" data-rule-required="true"'+
-								'placeholder="전화번호을 입력해주세요"></div></div>'+
-							'<div class="form-group" id="divAddr">'+
-							'<label for="divProdName" class="col-lg-2 control-label">배송 주소</label>'+
-							'<div class="col-lg-10">'+
-								'<input type="text" class="form-control" id="prodName" name="prodName" data-rule-required="true"'+
-								'placeholder="배송지를 입력해주세요"></div></div>'+
-					   		'<div class="form-group" id="divPhone">');
-	   		$('<a href="/addBuy.do?prodNo=<%=product.getProdNo()%>"><button id="buy" type="submit" class="btn btn-success" >구매</button></a>').replaceAll("#buy")
-	   		$('<a href="javascript:history.go(-1);"><button id="cancel" type="button" class="btn btn-success" >취소</button></a>').replaceAll("#buket")
-	   	}	
+	 
 	</script> 
 </head>
 <body>

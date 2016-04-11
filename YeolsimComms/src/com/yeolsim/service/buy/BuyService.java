@@ -10,7 +10,9 @@ public interface BuyService {
 	
 	public void insertBuy(Buy buy) throws Exception;
 
-	public Buy getBuy(int memberNo) throws Exception;
+	public Buy getBuy(int totalBuy) throws Exception;
+	
+	public Map<String,Object> getBuy2(int buyNo) throws Exception;
 
 	public void delBuy(int tranNo) throws Exception;
 

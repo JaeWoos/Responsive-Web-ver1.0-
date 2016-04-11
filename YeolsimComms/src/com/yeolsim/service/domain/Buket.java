@@ -10,9 +10,18 @@ public class Buket {
 	private int memberNo;
 	private int prodNo;
 	private int count;
+	private int stat;
 	
 	///Constructor
 	public Buket(){
+	}
+
+	public int getStat() {
+		return stat;
+	}
+
+	public void setStat(int stat) {
+		this.stat = stat;
 	}
 
 	public int getTotalBuy() {

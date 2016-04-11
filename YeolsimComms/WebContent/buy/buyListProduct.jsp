@@ -4,12 +4,14 @@
 <%@ page import="java.util.List"  %>
 <%@ page import="com.yeolsim.service.domain.Member" %>
 <%@ page import="com.yeolsim.service.domain.Product" %>
+<%@ page import="com.yeolsim.service.domain.Buy" %>
 
 <% String path=request.getContextPath(); %>
     
 <%
 		Member member = (Member)session.getAttribute("member");
-		List<Product> list= (List<Product>)request.getAttribute("product");
+		List<Product> prodList= (List<Product>)request.getAttribute("product");
+		List<Buy> buyList= (List<Buy>)request.getAttribute("buy");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,16 +66,18 @@
                 <p class="lead">개인 관리</p>
                 <div class="list-group">
                     <a href="/updateMemberView.do?userId=<%=member.getId()%>" class="list-group-item">개인정보 수정</a>
-                    <a href="/product/addProduct.jsp?userId=<%=member.getId()%>" class="list-group-item">상품 등록</a>
-                    <a href="/listBuy.do?userId=<%=member.getId()%>" class="list-group-item" style="background-color:#DCDCDC">구매 목록</a>
+                    <a href="/product/addProduct.jsp?userId=<%=member.getId()%>" class="list-group-item" >상품 등록</a>
+                    <a href="/addBuketList.do" class="list-group-item"  >장바 구니</a>
+                    <a href="/listBuy.do?userId=<%=member.getId()%>" class="list-group-item"  >구매 목록</a>
                 </div>
             </div>
             
             <div class="col-md-9">
                 <div class="row">
                     <%
-							for(int i=0; i<list.size(); i++) {
-								Product product = list.get(i);
+							for(int i=0; i<prodList.size(); i++) {
+								Product product = prodList.get(i);
+								Buy	 buy=buyList.get(i);
 					%>
 					 <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">	
@@ -81,7 +85,7 @@
                               <div class="caption">
                                 <h4 class="pull-right"><%=product.getPrice() %> 원</h4>
                                 <h4 style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                			<a href="/getBuy.do?prodNo=<%=product.getProdNo()%>"><%=product.getProdName() %></a>
+                                			<a href="/listGetBuy.do?prodNo=<%=product.getProdNo()%>&buyNo=<%=buy.getBuyNo()%>"><%=product.getProdName() %></a>
                                 </h4>
                                 <p><%=product.getInfo() %></p>
                             </div>

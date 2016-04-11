@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
 
@@ -12,7 +13,10 @@
 		Member member = (Member)session.getAttribute("member");
 		List<Product> prodList =(List<Product>)request.getAttribute("product");
 		System.out.println(prodList);
-		List<Buket> buketList=(List<Buket>)request.getAttribute("buy");
+		List<Buket> buketList=(List<Buket>)request.getAttribute("buket");
+		System.out.println(buketList);
+		
+		String temp;
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,10 +37,40 @@
     <script src="<%=path%>/bootstrap/js/bootstrap.min.js"></script>
     <!-- Custom CSS -->
     <link href="css/1-col-portfolio.css" rel="stylesheet">
+    
+    <script type="text/javascript">
+    	function buy(){
+			var totalNo=$(":checked");
+ 			var list=[];
+			var listTotalNo ="";
+			console.log(totalNo);
+			for(var i=0 ; i<totalNo.size(); i++){
+				list=totalNo[i].name;
+				listTotalNo+=list+",";
+			}
+			postGo("/addBuketBuy.do", {"totalNo":listTotalNo})
+    	}
+    	
+    	function postGo(path, params, method){
+    		  method = method || "post";
+    		  var form = document.createElement("form");
+    		    form.setAttribute("method", method);
+    		    form.setAttribute("action", path);
+    		    for(var key in params) {
+    		        var hiddenField = document.createElement("input");
+    		        hiddenField.setAttribute("type", "hidden");
+    		        hiddenField.setAttribute("name", key);
+    		        hiddenField.setAttribute("value", params[key]);
+    		 
+    		        form.appendChild(hiddenField);
+    		    }
+    		    console.log(form)
+    		    document.body.appendChild(form);
+    		   form.submit();
+    	}
+    </script>
 </head>
-
 <body>
-
     <!-- Navigation -->
    <nav class="navbar navbar-inverse navbar-fixed-top">
        <div class="container">
@@ -65,32 +99,43 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">구매 리스트</h1>
+                <h1 class="page-header">장바구니 리스트</h1>
             </div>
         </div>
+        <form  action="/addBuketBuy.do" method="POST">
+  
         <!-- Project One -->
-        <%
+         <%
         	for(int i=0 ; i<prodList.size() ; i++){
         		Product prod=prodList.get(i);
+        		Buket buket=buketList.get(i);
         %>
         <div class="row">
+          <div>
+    		<div class="checkbox">
+      			<label>
+      			<input type="checkbox" name="check" value="<%=buket.getTotalBuy()%>">
+      			</label>
+    		</div>
+  		 </div>
             <div class="col-md-7">
                 <a href="#">
                     <img class="img-responsive" src="/img/<%=prod.getPic() %>" alt="" style="width: 320px; height: 200px;">
                 </a>
             </div>
             <div class="col-md-5">
-                <h3><%=prod.getProdName() %></h3>
-                <h4>가격 : <%=prod.getPrice() %></h4>
-                <p><%=prod.getInfo() %></p>
-                <a class="btn btn-primary" href="#">결제 하기 <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <div> <h3><%=prod.getProdName() %></h3></div>
+                <div> <h4>가격 : <%=prod.getPrice() %></h4></div>
+                <div> <p><%=prod.getInfo() %></p></div>
+                <div> <h4>수량 : <%=buket.getCount()%></h4></div>
             </div>
         </div>
         <hr>
-        <%} %>
+        <%} %> 
+                <button class="btn btn-primary" type="submit" >결제 하기 <span class="glyphicon glyphicon-chevron-right"></span></button>
+        </form>
         <!-- /.row -->
-
-
+        </div>
         <hr>
     <!-- /.container -->
 

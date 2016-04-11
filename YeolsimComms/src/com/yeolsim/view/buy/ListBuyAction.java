@@ -44,6 +44,7 @@ public class ListBuyAction extends Action {
 //		Map<String,Object> map=service.getProductList(memberNo);
 
 		request.setAttribute("product", map.get("product"));
+		request.setAttribute("buy", map.get("buy"));
 		request.setAttribute("member", map.get("member"));
 
 		return "forward:/buy/buyListProduct.jsp";

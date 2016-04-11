@@ -10,9 +10,12 @@
     
 <%
 		Member member = (Member)session.getAttribute("member");
-		Product product=(Product)request.getAttribute("product");
-		Buket buket=(Buket)request.getAttribute("buket");
+		List<Product> product=(List<Product>)request.getAttribute("product");
+		List<Buket> buket=(List<Buket>)request.getAttribute("buket");
+		System.out.println("gg:"+product);
+		System.out.println("gg:"+buket);
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +41,7 @@
     window.onload=function(){
     	$("#pay").click(function(){
     		alert("gg");
-    		document.getElementById("addBuy").action="/getBuy.do"
+    		document.getElementById("addBuy").action="/listGetBuy.do"
     		
     	})
     }
@@ -80,18 +83,30 @@
             </div>
         </div>
         <!-- Project One -->
+        <%
+        int totalPrice=0;
+        String totalBuy="";
+        String prodNo="";
+        	for(int i=0 ; i<product.size() ; i++){
+        		Product prod=(Product)product.get(i);
+        		Buket buk=(Buket)buket.get(i);
+        		totalBuy+=buk.getTotalBuy()+",";
+        		prodNo+=prod.getProdNo()+",";
+        		totalPrice+=prod.getPrice();
+        %>
         <div class="row">
             <div class="col-md-7">
-                <a href="#">
-                    <img class="img-responsive" src="/img/<%=product.getPic() %>" alt="" style="width: 320px; height: 200px;">
-                </a>
+                    <img class="img-responsive" src="/img/<%=prod.getPic() %>" alt="" style="width: 320px; height: 200px;">
             </div>
             <div class="col-md-5">
-                <h3><%=product.getProdName() %></h3>
-                <h4>가격 : <%=product.getPrice() %></h4>
-                <p><%=product.getInfo() %></p>
+                <h3><%=prod.getProdName() %></h3>
+                <h4>가격 : <%=prod.getPrice() %></h4>
+                <h4>수량 : <%=buk.getCount() %></h4>
+                <p><%=prod.getInfo() %></p>
             </div>
         </div>
+        <hr>
+        <% } %>
         <hr>
         <!-- /.row -->
 		<form class="form-horizontal" role="form" method="post" id="addBuy">                  
@@ -116,10 +131,9 @@
             <div class="form-group" id="divPrice">
                 <label for="inputPrice" class="col-lg-2 control-label">총 결제금액</label>
                 <div class="col-lg-10">
-                    <div><h3 style="margin: 3px;" ><%=product.getPrice() %>원</h3></div>
-                    <input type="hidden" name="price" value="<%=product.getPrice() %>">
-                    <input type="hidden" name="totalBuy" value="<%=buket.getTotalBuy() %>">
-                    <input type="hidden" name="prodNo" value="<%=product.getProdNo() %>">
+                    <div><h3 style="margin: 3px;" ><%=totalPrice %>원</h3></div>
+                    <input type="hidden" name="totalBuy" value="<%=totalBuy%>">
+                    <input type="hidden" name="prodNo" value="<%=prodNo %>">
                 </div>
             </div>
             <div class="form-group" id="divPrice">
@@ -127,16 +141,16 @@
              <div class="col-lg-10">
 	            <div class="btn-group" data-toggle="buttons">
 	                <label class="btn btn-default">
-	                    <input type="radio" name="pay" value="1" /> 신용카드
+	                    <input type="radio"  name="pay" value="1" /> 신용카드
 	                </label> 
 	                <label class="btn btn-default">
-	                    <input type="radio" name="pay" value="2" /> 계좌이체
+	                    <input type="radio"  name="pay" value="2" /> 계좌이체
 	                </label> 
 	                <label class="btn btn-default">
 	                    <input type="radio" name="pay" value="3" /> 기타
 	                </label> 
 	                <label class="btn btn-default">
-	                    <input type="radio" name="pay" value="4" /> 외상
+	                    <input type="radio"  name="pay" value="4" /> 외상
 	                </label> 
 	            </div>
 	            </div>

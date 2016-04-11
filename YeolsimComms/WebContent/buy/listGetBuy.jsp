@@ -19,8 +19,7 @@
 		System.out.println(pay);
 		List<Product> prodList =(List<Product>)request.getAttribute("product");
 		System.out.println(prodList);
-		Buy buy=(Buy)request.getAttribute("buy");
-		//List<Buy> buyList=(List<Buy>)request.getAttribute("buy");
+		List<Buy> buyList=(List<Buy>)request.getAttribute("buyList");
 		
 %>
 <!DOCTYPE html>
@@ -95,28 +94,60 @@
 				 </div>
 				        <!-- Project One -->
 				        <%
+				        int totalPrice=0;
 				        	for(int i=0 ; i<prodList.size() ; i++){
 				        		Product prod=prodList.get(i);
+				        		totalPrice+=prod.getPrice();
 				        %>
-				        <div class="row">
-				            <div class="col-md-7">
-				                <a href="#">
-				                    <img class="img-responsive" src="/img/<%=prod.getPic() %>" alt="" style="width: 320px; height: 200px;">
-				                </a>
-				            </div>
-				            <div class="col-md-5">
-				            	<h3>구매자 이름 : <%=buyMember.getName() %></h3>
-				            	<h3>구매자 연락처 :<%=buyMember.getPhone()%></h3>
-				            	<h3>배송 주소 :<%=buyMember.getAddr() %></h3>
-				                <h3><%=prod.getProdName() %></h3>
-				                <h4>가격 : <%=prod.getPrice() %></h4>
-				                <p><%=prod.getInfo() %></p>
-				                <a href="/listBuy.do?userId=<%=member.getId()%>&totalBuy=<%=buy.getTotalBuy()%>" class="btn btn-primary">확 인<span class="glyphicon glyphicon-chevron-right"></span></a>
-				            </div>
-				        </div>
-				        <%} %>
-				        <hr>
-				   </div>
+							<div class="row">
+								<div class="col-md-7">
+									<img class="img-responsive" src="/img/<%=prod.getPic()%>" alt=""style="width: 320px; height: 200px;">
+								</div>
+								<div class="col-md-5">
+									<h3><%=prod.getProdName()%></h3>
+									<h4>
+										가격 :<%=prod.getPrice()%></h4>
+									<p><%=prod.getInfo()%></p>
+								</div>
+							</div>
+							<hr>
+						<%
+							}
+						%>
+				<hr>
+				<form class="form-horizontal" role="form" method="post" id="addBuy">                  
+            <div class="form-group" id="divName">
+                <label for="inputName" class="col-lg-2 control-label">받으실 분</label>
+                <div class="col-lg-10">
+                    <div><h3><%=buyMember.getName() %></h3></div>
+                </div>
+            </div>
+            <div class="form-group" id="divPhone">
+                <label for="inputPhone" class="col-lg-2 control-label">전화 번호</label>
+                <div class="col-lg-10">
+                       <div><h3><%=buyMember.getPhone() %></h3></div>
+                </div>
+            </div>
+            <div class="form-group" id="divAddr">
+                <label for="inputPhone" class="col-lg-2 control-label">배송지 주소</label>
+                <div class="col-lg-10">
+                      <div><h3><%=buyMember.getAddr() %></h3></div>
+                </div>
+            </div>
+            <div class="form-group" id="divPrice">
+                <label for="inputPrice" class="col-lg-2 control-label">총 결제금액</label>
+                <div class="col-lg-10">
+                       <div><h3><%=totalPrice %></h3></div>
+                </div>
+            </div>
+            <div class="form-group" id="divPrice">
+            <label for="inputPrice" class="col-lg-2 control-label">결제 수단</label>
+             <div class="col-lg-10">
+				   <div><h3><%=pay.getPayMenu() %></h3></div>	
+			 </div>
+            </div>
+        </form>
+			</div>
         </div>
   </div>
     <!-- /.container -->
